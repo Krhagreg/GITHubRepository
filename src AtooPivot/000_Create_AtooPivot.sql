@@ -1,27 +1,25 @@
-/*    ==Paramètres de script==
-
-    Version du serveur source : SQL Server 2014 (12.0.4237)
-    Édition du moteur de base de données source : Microsoft SQL Server Enterprise Edition
-    Type du moteur de base de données source : SQL Server autonome
-
-    Version du serveur cible : SQL Server 2014
-    Édition du moteur de base de données cible : Microsoft SQL Server Enterprise Edition
-    Type du moteur de base de données cible : SQL Server autonome
-*/
-
 USE [master]
 GO
 
 /****** Object:  Database [AtooPivot]    Script Date: 30/08/2017 18:01:47 ******/
 CREATE DATABASE [AtooPivot]
- CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'AtooPivot', FILENAME = N'D:\AtooRoot\Work\Pivot\AtooPivot.mdf' , SIZE = 24576KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
+ LOG ON 
+( NAME = N'AtooPivot_log', FILENAME = N'D:\AtooRoot\Work\Pivot\AtooPivot_log.ldf' , SIZE = 52416KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
+GO
+
+
+
+/****** Object:  Database [AtooPivot]    Script Date: 30/08/2017 18:10:55 ******/
+CREATE DATABASE [AtooPivot]
  ON  PRIMARY 
 ( NAME = N'AtooPivot', FILENAME = N'C:\Cegid\FusionLDG\BDD CGA40\AtooPivot.mdf' , SIZE = 24576KB , MAXSIZE = UNLIMITED, FILEGROWTH = 1024KB )
  LOG ON 
 ( NAME = N'AtooPivot_log', FILENAME = N'C:\Cegid\FusionLDG\BDD CGA40\AtooPivot_log.ldf' , SIZE = 52416KB , MAXSIZE = 2048GB , FILEGROWTH = 10%)
 GO
 
-ALTER DATABASE [AtooPivot] SET COMPATIBILITY_LEVEL = 120
+ALTER DATABASE [AtooPivot] SET COMPATIBILITY_LEVEL = 100
 GO
 
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
@@ -108,15 +106,85 @@ GO
 ALTER DATABASE [AtooPivot] SET DB_CHAINING OFF 
 GO
 
-ALTER DATABASE [AtooPivot] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
-GO
-
-ALTER DATABASE [AtooPivot] SET TARGET_RECOVERY_TIME = 0 SECONDS 
-GO
-
-ALTER DATABASE [AtooPivot] SET DELAYED_DURABILITY = DISABLED 
-GO
-
 ALTER DATABASE [AtooPivot] SET  READ_WRITE 
 GO
 
+
+USE [AtooPivot]
+GO
+/****** Object:  Table [dbo].[_ASS_COMMUNS]    Script Date: 30/08/2017 18:58:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[_ASS_COMMUNS](
+	[ASS_RAISON_SOCIALE] [nvarchar](50) NULL,
+	[ASS_NOM] [nvarchar](40) NULL,
+	[ASS_PRENOM] [nvarchar](40) NULL,
+	[ASS_ID_DST] [bigint] NULL,
+	[ASS_ID_SRC] [bigint] NULL,
+	[ASS_ID_ADH_SRC] [bigint] NULL,
+	[ASS_IS_FUSION] [bit] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[_CAB_BUR_COMMUNS]    Script Date: 30/08/2017 18:58:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[_CAB_BUR_COMMUNS](
+	[CAB_NUM_CAB_DST] [bigint] NULL,
+	[CAB_NUM_CAB_SRC] [bigint] NULL,
+	[CAB_REF_CAB_DST] [varchar](10) NULL,
+	[CAB_REF_CAB_SRC] [varchar](10) NULL,
+	[CAB_EXIST_IN_BOTH] [bit] NULL,
+	[CAB_IS_SAME_REF] [bit] NULL,
+	[CAB_EXIST_IN_DST_ONLY] [bit] NULL,
+	[CAB_EXIST_IN_SRC_ONLY] [bit] NULL,
+	[BUR_ID_DST] [bigint] NULL,
+	[BUR_ID_SRC] [bigint] NULL,
+	[BUR_CODE_DST] [varchar](15) NULL,
+	[BUR_CODE_SRC] [varchar](15) NULL,
+	[BUR_EXIST_IN_BOTH] [bit] NULL,
+	[BUR_IS_SAME_ID] [bit] NULL,
+	[BUR_EXIST_IN_DST_ONLY] [bit] NULL,
+	[BUR_EXIST_IN_SRC_ONLY] [bit] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[_COL_COMMUNS]    Script Date: 30/08/2017 18:58:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[_COL_COMMUNS](
+	[COL_NOM] [nvarchar](40) NULL,
+	[COL_PRENOM] [nvarchar](40) NULL,
+	[COL_ID_COLLABORATEUR_DST] [bigint] NULL,
+	[COL_ID_COLLABORATEUR_SRC] [bigint] NULL,
+	[COL_BUR_ID_DST] [bigint] NULL,
+	[COL_BUR_ID_SRC] [bigint] NULL,
+	[COL_EXIST_IN_BOTH] [bit] NULL,
+	[COL_EXIST_IN_SRC_ONLY] [bit] NULL,
+	[COL_BUR_DST_IS_IN_BUR_COMMUN] [bit] NULL,
+	[COL_BUR_SRC_IS_IN_BUR_COMMUN] [bit] NULL
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[_EXP_COMMUNS]    Script Date: 30/08/2017 18:58:20 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[_EXP_COMMUNS](
+	[EXP_NOM] [nvarchar](40) NULL,
+	[EXP_PRENOM] [nvarchar](40) NULL,
+	[EXP_ID_EXPERT_DST] [bigint] NULL,
+	[EXP_ID_EXPERT_SRC] [bigint] NULL,
+	[EXP_BUR_ID_DST] [bigint] NULL,
+	[EXP_BUR_ID_SRC] [bigint] NULL,
+	[EXP_EXIST_IN_BOTH] [bit] NULL,
+	[EXP_EXIST_IN_DST_ONLY] [bit] NULL,
+	[EXP_EXIST_IN_SRC_ONLY] [bit] NULL,
+	[EXP_BUR_DST_IS_IN_BUR_COMMUN] [bit] NULL,
+	[EXP_BUR_SRC_IS_IN_BUR_COMMUN] [bit] NULL
+) ON [PRIMARY]
+GO
